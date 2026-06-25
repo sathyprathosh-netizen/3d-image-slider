@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* ====== Relevant CSS ====== */
+        .scene,
+        .a3d {
+            display: grid;
+        }
+
+        .scene {
+            /* prevent scrollbars */
+            overflow: hidden;
+            /* for 3D look; smaller = more extreme effect */
+            perspective: 35em;
+            mask: linear-gradient(90deg, #0000, red 20% 80%, #0000);
+        }
+
+        .a3d {
+            place-self: center;
+            /* don't flatten 3D transformed children 
+   * of this parent having its own 3D transform */
+            transform-style: preserve-3d;
+        }
+
+        .card {
+            /* base card width, you may change this */
+            --w: 17.5em;
+            /* compute base angle corresponding to a card */
+            --ba: 1turn/var(--n);
+            /* in the future: sibling-count() */
+            grid-area: 1/1;
+            width: var(--w);
+            aspect-ratio: 7/10;
+            border-radius: 1.5em;
+            /* don't want to see back of cards in front of screen plane */
+            backface-visibility: hidden;
+            /* need to use a transform chain here, cannot use separate 
+   * rotate & translate properties because they'd be applied 
+   * in wrong order (translate, then rotate) for what we need */
+            transform: rotatey(calc(var(--i)*var(--ba))) translatez(calc(-1*(.5*var(--w) + .5em)/tan(.5*var(--ba))));
+
+            /* Review styling */
+            background: #ffffff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #f0f0f0;
+            padding: 1.5em;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: 1em;
+        }
+
+        .review-avatar {
+            width: 3em;
+            height: 3em;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .review-author {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .review-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #202124;
+        }
+
+        .review-date {
+            font-size: 0.85em;
+            color: #70757a;
+        }
+
+        .review-stars {
+            color: #fbbc04;
+            font-size: 1.4em;
+            letter-spacing: 2px;
+        }
+
+        .review-text {
+            color: #3c4043;
+            line-height: 1.5;
+            font-size: 1em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+
+        /* ====== General page prettifying and layout ====== */
+        html,
+        body {
+            display: grid;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            background: #fff;
+        }
+
+        /* ====== Mobile Responsiveness for 3D Effect ====== */
+        @media (max-width: 768px) {
+            .scene {
+                /* Move the "camera" back on narrow screens so it doesn't look flat */
+                perspective: 60em; 
+            }
+            .card {
+                /* Shrink the card size on mobile to make the circular radius smaller */
+                --w: 13em;
+                font-size: 0.8em; 
+                padding: 1.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="scene">
+        <div class="a3d" style="--n: 12">
+            <div class="card" style="--i: 0">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: #4285F4;">J</div>
+                    <div class="review-author">
+                        <span class="review-name">John Doe</span>
+                        <span class="review-date">2 weeks ago</span>
+                    </div>
+                </div>
+                <div class="review-stars">★★★★★</div>
+                <div class="review-text">Absolutely fantastic service! The team was highly professional and delivered way ahead of schedule. Would definitely recommend to anyone looking for quality work.</div>
+            </div>
+            <div class="card" style="--i: 1">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: #EA4335;">S</div>
+                    <div class="review-author">
+                        <span class="review-name">Sarah Smith</span>
+                        <span class="review-date">1 month ago</span>
+                    </div>
+                </div>
+                <div class="review-stars">★★★★★</div>
+                <div class="review-text">I was blown away by the attention to detail. They really took the time to understand my needs and delivered a product that exceeded all my expectations.</div>
+            </div>
+            <div class="card" style="--i: 2">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: #FBBC05;">M</div>
+                    <div class="review-author">
+                        <span class="review-name">Michael Brown</span>
+                        <span class="review-date">3 months ago</span>
+                    </div>
+                </div>
+                <div class="review-stars">★★★★☆</div>
+                <div class="review-text">Great experience overall. The communication was smooth and the final result is exactly what we discussed. A minor delay, but the quality made up for it.</div>
+            </div>
+            <div class="card" style="--i: 3">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: #34A853;">E</div>
+                    <div class="review-author">
+                        <span class="review-name">Emily Davis</span>
+                        <span class="review-date">2 days ago</span>
+                    </div>
+                </div>
+                <div class="review-stars">★★★★★</div>
+                <div class="review-text">Five stars all the way! The customer support is top-notch and the user interface is incredibly intuitive. I use this every single day now.</div>
+            </div>
+            <div class="card" style="--i: 4">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: #8E24AA;">D</div>
+                    <div class="review-author">
+                        <span class="review-name">David Wilson</span>
+                        <span class="review-date">5 months ago</span>
+                    </div>
+                </div>
+                <div class="review-stars">★★★★★</div>
+                <div class="review-text">Simply the best in the market. I've tried several competitors, but none come close to the reliability and feature set offered here. Highly recommended!</div>
+            </div>
+            <div class="card" style="--i: 5">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: #F4511E;">O</div>
+                    <div class="review-author">
+                        <span class="review-name">Olivia Martinez</span>
+                        <span class="review-date">1 week ago</span>
+                    </div>
+                </div>
+                <div class="review-stars">★★★★★</div>
+                <div class="review-text">A game changer for our business. Setup was a breeze, and we saw immediate improvements in our workflow efficiency. Thank you so much!</div>
+            </div>
+            <div class="card" style="--i: 6">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: #00ACC1;">J</div>
+                    <div class="review-author">
+                        <span class="review-name">James Taylor</span>
+                        <span class="review-date">2 weeks ago</span>
+                    </div>
+                </div>
+                <div class="review-stars">★★★★☆</div>
+                <div class="review-text">Very solid product. Has all the features I need and works without any major bugs. The pricing is also very reasonable compared to alternatives.</div>
+            </div>
+            <div class="card" style="--i: 7">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: #43A047;">S</div>
+                    <div class="review-author">
+                        <span class="review-name">Sophia Anderson</span>
+                        <span class="review-date">4 months ago</span>
+                    </div>
+                </div>
+                <div class="review-stars">★★★★★</div>
+                <div class="review-text">I cannot express how much I love this! The design is beautiful, and it's so easy to use. Customer service was also very quick to answer my questions.</div>
+            </div>
+            <div class="card" style="--i: 8">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: #3949AB;">W</div>
+                    <div class="review-author">
+                        <span class="review-name">William Thomas</span>
+                        <span class="review-date">6 months ago</span>
+                    </div>
+                </div>
+                <div class="review-stars">★★★★★</div>
+                <div class="review-text">Excellent value for money. The continuous updates show that the team really cares about their product and their users. Keep up the great work.</div>
+            </div>
+            <div class="card" style="--i: 9">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: #D81B60;">I</div>
+                    <div class="review-author">
+                        <span class="review-name">Isabella Jackson</span>
+                        <span class="review-date">3 weeks ago</span>
+                    </div>
+                </div>
+                <div class="review-stars">★★★★★</div>
+                <div class="review-text">Outstanding experience from start to finish. I've recommended this to all my friends and family. It truly makes life easier!</div>
+            </div>
+            <div class="card" style="--i: 10">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: #5E35B1;">L</div>
+                    <div class="review-author">
+                        <span class="review-name">Lucas White</span>
+                        <span class="review-date">1 month ago</span>
+                    </div>
+                </div>
+                <div class="review-stars">★★★★☆</div>
+                <div class="review-text">Good, but could use some minor UI tweaks. Overall, very satisfied with the core functionality. I'm excited to see what future updates bring.</div>
+            </div>
+            <div class="card" style="--i: 11">
+                <div class="review-header">
+                    <div class="review-avatar" style="background: #E53935;">M</div>
+                    <div class="review-author">
+                        <span class="review-name">Mia Harris</span>
+                        <span class="review-date">2 months ago</span>
+                    </div>
+                </div>
+                <div class="review-stars">★★★★★</div>
+                <div class="review-text">Perfect! Exactly what I was looking for. No unnecessary bloatware, just the features you actually need, neatly packaged.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const a3d = document.querySelector('.a3d');
+        let currentAngle = 0;
+        let isDragging = false;
+        let startX = 0;
+        
+        // 1. Mouse Wheel / Trackpad Scroll
+        window.addEventListener('wheel', (e) => {
+            // Support both horizontal and vertical scrolling
+            currentAngle -= (e.deltaX + e.deltaY) * 0.15; 
+            a3d.style.transform = `rotateY(${currentAngle}deg)`;
+        });
+
+        // 2. Touch Swiping (Mobile/Tablets)
+        window.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+        
+        window.addEventListener('touchmove', (e) => {
+            let deltaX = e.touches[0].clientX - startX;
+            currentAngle += deltaX * 0.5;
+            a3d.style.transform = `rotateY(${currentAngle}deg)`;
+            startX = e.touches[0].clientX;
+        });
+
+        // 3. Mouse Click and Drag (Desktop)
+        window.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            document.body.style.cursor = 'grabbing';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            let deltaX = e.clientX - startX;
+            // When dragging right, deltaX is positive, so it rotates right
+            currentAngle += deltaX * 0.3;
+            a3d.style.transform = `rotateY(${currentAngle}deg)`;
+            startX = e.clientX;
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+            document.body.style.cursor = 'default';
+        });
+
+        window.addEventListener('mouseleave', () => {
+            isDragging = false;
+            document.body.style.cursor = 'default';
+        });
+    </script>
+</body>
+
+</html>
